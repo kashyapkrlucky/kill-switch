@@ -1,6 +1,7 @@
 import mongoose, { Schema, models, Model } from "mongoose";
 import { IDBUser } from "@/core/types/database.types";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 /**
  * Mongoose schema for the User model
@@ -42,6 +43,11 @@ const UserSchema = new Schema<IDBUser>(
         message: "Avatar must be a valid image URL",
       },
     },
+    passwordReset: {
+      token: { type: String, index: true },
+      expiresAt: { type: Date },
+      usedAt: { type: Date },
+    },
   },
   {
     timestamps: true,
@@ -66,6 +72,18 @@ UserSchema.methods.comparePassword = async function (
 ): Promise<boolean> {
   // In a real implementation, this would use bcrypt.compare()
   return await bcrypt.compare(candidatePassword, this.password);
+};
+
+UserSchema.methods.createPasswordResetToken = async function () {
+  const rawToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordReset = {
+    token: crypto.createHash("sha256").update(rawToken).digest("hex"),
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 min
+  };
+
+  await this.save(); // Save the document to MongoDB
+  return rawToken; // send via email
 };
 
 /**

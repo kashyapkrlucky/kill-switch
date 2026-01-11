@@ -20,6 +20,33 @@ export interface IUser {
   updatedAt?: string;
 }
 
+
+export interface IProfile {
+  /** Unique identifier for the profile */
+  _id: string;
+  user: IUser;
+  name: string;
+  username: string;
+  bio?: string;
+  dob?: Date;
+  phone?: string;
+  city?: string;
+  country?: string;
+  isPublic?: boolean;
+  cover?: string;
+  urlWebsite?: string;
+  urlLinkedIn?: string;
+  urlTwitter?: string;
+  urlGithub?: string;
+  urlInstagram?: string;
+  urlDribbble?: string;
+
+  /** When the reply was created */
+  createdAt: string;
+  /** When the reply was last updated */
+  updatedAt: string;
+}
+
 export interface IProject {
   /** Unique identifier for the project */
   _id: string;

@@ -16,10 +16,42 @@ export interface IDBUser extends Document {
   bio?: string;
   /** User's avatar image URL */
   avatar?: string;
+
+  /** Password reset token and expiration */
+  passwordReset?: {
+    token?: string;
+    expiresAt?: Date;
+    usedAt?: Date;
+  };
+  /** Creates a password reset token and returns the raw token */
+  createPasswordResetToken(): string;
+  /** Compares a candidate password with the stored hash */
+  comparePassword(candidatePassword: string): Promise<boolean>;
+  
   /** User created at */
   createdAt?: Date;
   /** User updated at */
   updatedAt?: Date;
+}
+
+
+export interface IDBProfile extends Document {
+  user: Types.ObjectId;
+  username: string;
+  name?: string;
+  bio?: string;
+  dob?: Date;
+  phone?: string;
+  city?: string;
+  country?: string;
+  isPublic?: boolean;
+  cover?: string;
+  urlWebsite?: string;
+  urlLinkedIn?: string;
+  urlTwitter?: string;
+  urlGithub?: string;
+  urlInstagram?: string;
+  urlDribbble?: string;
 }
 
 export interface IDBProject extends Document {

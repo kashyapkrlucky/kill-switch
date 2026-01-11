@@ -13,7 +13,7 @@ export function ButtonOutline({
 }: ButtonOutlineProps) {
   return (
     <button
-      className={`rounded-full border border-solid border-black/[.08] transition-colors hover:border-transparent cursor-pointer hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] ${
+      className={`rounded-lg border border-gray-300 transition-colors text-gray-300 cursor-pointer hover:border-gray-200 ${
         size === "sm" ? "px-3 py-1" : size === "lg" ? "px-7 py-3" : "px-5 py-2"
       } ${className}`}
       {...props}

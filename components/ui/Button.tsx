@@ -12,7 +12,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`rounded-full bg-foreground text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] cursor-pointer ${
+      className={`rounded-lg bg-emerald-500 hover:bg-emerald-600 text-background transition-colors cursor-pointer ${
         size === "sm" ? "px-3 py-1" : size === "lg" ? "px-7 py-3" : "px-5 py-2"
       } ${className}`}
       {...props}
