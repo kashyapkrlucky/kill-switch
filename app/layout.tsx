@@ -43,10 +43,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${notoSans.className}  antialiased flex flex-col min-h-screen`}
+        className={`${notoSans.className} antialiased flex flex-col min-h-screen bg-gray-900`}
       >
         <Header />
-        <div className="flex-1 bg-zinc-50 dark:bg-black overflow-hidden h-full flex flex-col">
+        <div className="flex-1 overflow-hidden h-full flex flex-col">
           {children}
           <Toaster />
         </div>

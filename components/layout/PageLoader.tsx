@@ -1,7 +1,9 @@
-export default function PageLoader({ theme }: { theme?: string }) {
+import { LoaderCircleIcon } from "lucide-react";
+
+export default function PageLoader() {
     return (
-        <div className="w-full h-full flex items-center justify-center">
-            <div className={`animate-spin rounded-full h-5 w-5 border-b-2 ${theme === "light" ? "border-white" : "border-purple-600"}`}></div>    
+        <div className="fixed w-screen h-screen bg-gray-900 flex items-center justify-center z-50">
+            <LoaderCircleIcon className="h-12 w-12 animate-spin text-white"/>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import { APP_NAME } from "@/core/utils/constants";
 
 const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL as string;
-
+const LOGO = "KS";
 const COMMON_STYLES = `
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 50%, #fff7ed 100%); padding: 20px; }
@@ -18,6 +18,8 @@ const COMMON_STYLES = `
     </style>
 `;
 
+const COPYRIGHT = `© 2025 ${APP_NAME}. All rights reserved.`;
+
 export const SIGNUP_TEMPLATE = `<!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +29,7 @@ ${COMMON_STYLES}
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">KS</div>
+            <div class="logo">${LOGO}</div>
             <h1>Welcome to ${APP_NAME}!</h1>
             <p>Thank you for joining ${APP_NAME}! Let's get started.</p>
         </div>
@@ -37,7 +39,7 @@ ${COMMON_STYLES}
             </p>
         </div>
         <div class="footer">
-            <p>© 2025 ${APP_NAME}. All rights reserved.</p>
+            <p>${COPYRIGHT}</p>
         </div>
     </div>
 </body>
@@ -52,7 +54,7 @@ ${COMMON_STYLES}
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">KS</div>
+            <div class="logo">${LOGO}</div>
             <h1>Reset Your Password</h1>
             <p>Secure your account with a new password</p>
         </div>
@@ -69,7 +71,7 @@ ${COMMON_STYLES}
             </p>
         </div>
         <div class="footer">
-            <p>© 2025 ${APP_NAME}. All rights reserved.</p>
+            <p>${COPYRIGHT}</p>
         </div>
     </div>
 </body>
@@ -84,7 +86,7 @@ ${COMMON_STYLES}
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">KS</div>
+            <div class="logo">${LOGO}</div>
             <h1>Password Reset Confirmed</h1>
             <p>Your ${APP_NAME} account password has been updated</p>
         </div>
@@ -98,7 +100,7 @@ ${COMMON_STYLES}
             </p>
         </div>
         <div class="footer">
-            <p>© 2025 ${APP_NAME}. All rights reserved.</p>
+            <p>${COPYRIGHT}</p>
         </div>
     </div>
 </body>
