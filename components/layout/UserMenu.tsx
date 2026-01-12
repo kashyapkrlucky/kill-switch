@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { Settings, LogOut, UserIcon } from "lucide-react";
+import { LogOut } from "lucide-react";
 import axios from "@/core/lib/axios";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -61,7 +60,7 @@ export function UserMenu() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg hover:shadow-xl transition-all duration-200"
+        className="flex items-center justify-center w-6 h-6 bg-emerald-500 rounded-lg text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-lg hover:shadow-xl transition-all duration-200"
         aria-haspopup="true"
         aria-expanded={isOpen}
       >
@@ -69,42 +68,22 @@ export function UserMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 rounded-2xl shadow-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 ring-opacity-5 z-50 overflow-hidden">
-          <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-200 truncate">
+        <div className="absolute right-0 mt-2 w-64 rounded-2xl shadow-2xl bg-gray-800 border border-gray-700 ring-opacity-5 z-50 overflow-hidden">
+          <div className="px-4 py-2 border-b border-gray-700">
+            <p className="text-sm font-semibold text-gray-200 truncate">
               {user?.username || "User"}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+            <p className="text-xs text-gray-400 truncate">
               {user?.email || ""}
             </p>
           </div>
 
-          <Link
-            href={`/profile/${user?.username}`}
-            className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-            role="menuitem"
-            onClick={() => setIsOpen(false)}
-          >
-            <UserIcon className="mr-3 h-5 w-5 text-gray-400 dark:text-gray-400" />
-            Profile
-          </Link>
-          <div className="border-t border-gray-100 dark:border-gray-700"></div>
-          <Link
-            href="/settings"
-            className="flex items-center px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-            role="menuitem"
-            onClick={() => setIsOpen(false)}
-          >
-            <Settings className="mr-3 h-5 w-5 text-gray-400 dark:text-gray-400" />
-            Account Settings
-          </Link>
-
           <button
             onClick={handleLogout}
-            className="w-full text-left flex items-center px-4 py-3 border-t border-gray-100 dark:border-gray-700  text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
+            className="w-full text-left flex items-center px-4 py-3 border-t border-gray-700  text-sm text-red-600 transition-colors duration-200"
             role="menuitem"
           >
-            <LogOut className="mr-3 h-5 w-5 text-red-500 dark:text-red-400" />
+            <LogOut className="mr-3 h-5 w-5 text-red-600" />
             Sign out
           </button>
         </div>

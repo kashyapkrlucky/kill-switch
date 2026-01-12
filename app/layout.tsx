@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Mona_Sans,Noto_Sans,Roboto_Condensed, Nunito_Sans, Inconsolata } from "next/font/google";
+import {
+  Mona_Sans,
+  Noto_Sans,
+  Roboto_Condensed,
+  Nunito_Sans,
+  Inconsolata,
+} from "next/font/google";
 import "@/styles/globals.css";
 import Header from "@/components/layout/Header";
 import { Toaster } from "react-hot-toast";
@@ -46,10 +52,8 @@ export default function RootLayout({
         className={`${notoSans.className} antialiased flex flex-col min-h-screen bg-gray-900`}
       >
         <Header />
-        <div className="flex-1 overflow-hidden h-full flex flex-col">
-          {children}
-          <Toaster />
-        </div>
+        {children}
+        <Toaster />
       </body>
     </html>
   );

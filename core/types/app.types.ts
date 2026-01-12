@@ -60,6 +60,8 @@ export interface IProject {
   owner: string;
   /** Project members */
   members: string[];
+  /** Project flags */
+  flags: number;
   /** Project created at */
   createdAt?: string;
   /** Project updated at */
@@ -76,9 +78,17 @@ export interface IFlag {
   /** Flag description */
   description?: string;
   /** Flag status */
-  status: 'active' | 'inactive';
+  status: FlagStatusType;
   /** Flag created at */
   createdAt?: string;
   /** Flag updated at */
   updatedAt?: string;
 }
+
+
+export const FlagStatus = {
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+} as const;
+
+export type FlagStatusType = typeof FlagStatus[keyof typeof FlagStatus];

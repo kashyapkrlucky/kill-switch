@@ -7,13 +7,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({
   children,
   className,
-  size = "md",
+  size = "sm",
   ...props
 }: ButtonProps) {
   return (
     <button
-      className={`rounded-lg bg-emerald-500 hover:bg-emerald-600 text-background transition-colors cursor-pointer ${
-        size === "sm" ? "px-3 py-1" : size === "lg" ? "px-7 py-3" : "px-5 py-2"
+      className={`inline-flex items-center gap-1 rounded-lg border border-emerald-500 bg-emerald-500 text-white hover:bg-emerald-600 transition-colors cursor-pointer ${
+        size === "sm" ? "px-4 py-2 text-xs" : size === "lg" ? "px-7 py-3 text-base" : "px-5 py-2 text-sm"
       } ${className}`}
       {...props}
     >

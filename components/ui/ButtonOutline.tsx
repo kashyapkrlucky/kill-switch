@@ -8,13 +8,13 @@ interface ButtonOutlineProps
 export function ButtonOutline({
   children,
   className,
-  size = "md",
+  size = "sm",
   ...props
 }: ButtonOutlineProps) {
   return (
     <button
-      className={`rounded-lg border border-gray-300 transition-colors text-gray-300 cursor-pointer hover:border-gray-200 ${
-        size === "sm" ? "px-3 py-1" : size === "lg" ? "px-7 py-3" : "px-5 py-2"
+      className={`rounded-lg border border-gray-400 transition-colors text-gray-300 cursor-pointer hover:border-gray-200 ${
+        size === "sm" ? "px-4 py-2 text-xs" : size === "lg" ? "px-7 py-3 text-base" : "px-5 py-2 text-sm"
       } ${className}`}
       {...props}
     >

@@ -9,8 +9,8 @@ interface ProjectStore {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   getProjects: () => Promise<void>;
-  createProject: (project: IProject) => Promise<void>;
-  updateProject: (project: IProject) => Promise<void>;
+  createProject: (project: Partial<IProject>) => Promise<void>;
+  updateProject: (project: Partial<IProject>) => Promise<void>;
   deleteProject: (projectId: string) => Promise<void>;
 }
 
