@@ -21,8 +21,8 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   setLoading: (loading: boolean) => set({ loading }),
   setError: (error: string | null) => set({ error }),
   getProjects: async () => {
-      try {
-        set({ loading: true });
+    try {
+      set({ loading: true });
       const {
         data: { data },
       } = await axios.get("/projects");

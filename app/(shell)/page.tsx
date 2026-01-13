@@ -1,45 +1,23 @@
+"use client";
+import ApiUsage from "@/components/dashboard/ApiUsage";
 import RecentFlags from "@/components/dashboard/RecentFlags";
-import RecentProjects from "@/components/dashboard/RecentProjects";
 import PageHeader from "@/components/layout/PageHeader";
 import InfoCard from "@/components/ui/InfoCard";
-import { IFlag, FlagStatus } from "@/core/types/app.types";
-import {
-  Flag,
-  FolderOpen,
-  Shield,
-  LayoutDashboardIcon,
-} from "lucide-react";
+import { useDashboardStore } from "@/store/useDashboardStore";
+import { Flag, FolderOpen, Shield, LayoutDashboardIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
-  // Mock data for dashboard
-  const stats = {
-    totalProjects: 12,
-    activeFlags: 24,
-    totalFlags: 31,
-    recentActivity: 8,
-  };
+  const { stats, getStats } = useDashboardStore();
+  const hasCurrentRef = useRef(false);
 
-  const recentFlags: IFlag[] = [
-    {
-      _id: "1",
-      name: "New User Dashboard",
-      project: "Web App",
-      status: FlagStatus.ACTIVE,
-      updatedAt: "2 hours ago",
-    },
-  ];
+  // Fetch recent flags on mount
+  useEffect(() => {
+    if (hasCurrentRef.current) return;
+    hasCurrentRef.current = true;
+    getStats();
+  }, [getStats]);
 
-  const recentProjects = [
-    {
-      _id: "1",
-      name: "Web App",
-      flags: 12,
-      status: "active" as const,
-      owner: "user1",
-      members: ["user1", "user2"],
-      updatedAt: "1 hour ago",
-    },
-  ];
 
   return (
     <div className="w-full p-2">
@@ -51,11 +29,10 @@ export default function Home() {
       />
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-
+      <div className="flex flex-row gap-4 mb-4">
         <InfoCard
           title="Total Projects"
-          value={stats.totalProjects}
+          value={stats.projects}
           icon={<FolderOpen className="w-4 h-4 text-blue-500" />}
           iconColor="bg-blue-500/20"
           description="+2 this week"
@@ -76,18 +53,20 @@ export default function Home() {
           iconColor="bg-purple-500/20"
           description="+5 this week"
         />
+
+        <InfoCard
+          title="API Tokens"
+          value={stats.apiTokens}
+          icon={<Shield className="w-4 h-4 text-purple-500" />}
+          iconColor="bg-purple-500/20"
+          description="+5 this week"
+        />
       </div>
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Recent Flags */}
-        <div className="lg:col-span-2">
-          <RecentFlags recentFlags={recentFlags} />
-        </div>
-
-        {/* Recent Projects */}
-        <div className="lg:col-span-1">
-          <RecentProjects recentProjects={recentProjects} />
-        </div>
+      <div className="flex flex-col gap-4">
+        {/* Recent Flags */} 
+          <RecentFlags />
+          <ApiUsage />  
       </div>
     </div>
   );

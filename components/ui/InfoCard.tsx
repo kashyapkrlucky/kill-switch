@@ -13,7 +13,7 @@ export default function InfoCard({
   iconColor = "bg-gray-500/20",
 }: InfoCardProps) {
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-3">
+    <div className="flex-1 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-3">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-gray-400 text-xs font-medium">{title}</p>
