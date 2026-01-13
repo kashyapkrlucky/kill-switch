@@ -89,3 +89,26 @@ export interface IDBFlag extends Document {
   /** Flag updated at */
   updatedAt?: Date;
 }
+
+export interface IDBProjectToken extends Document {
+  /** Unique identifier for the project token */
+  _id: Types.ObjectId;
+  /** Project token project */
+  project: Types.ObjectId;
+  /** Project token */
+  token: string;
+  /** Project token expiration */
+  expiresAt: Date;
+  /** Project token status */
+  status: 'active' | 'inactive';
+  /** Project token usage */
+  usage: {
+    requests: number;
+    limit: number;
+  };
+  /** Project token created at */
+  createdAt?: Date;
+  /** Project token updated at */
+  updatedAt?: Date;
+}
+

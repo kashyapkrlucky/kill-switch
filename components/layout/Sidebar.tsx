@@ -43,7 +43,7 @@ const navigation: NavItem[] = [
   },
   {
     name: "API Access",
-    href: "/api-access",
+    href: "/access",
     icon: KeyIcon,
   },
 ];

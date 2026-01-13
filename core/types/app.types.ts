@@ -77,3 +77,25 @@ export const FlagStatus = {
 } as const;
 
 export type FlagStatusType = (typeof FlagStatus)[keyof typeof FlagStatus];
+
+
+export interface IProjectToken {
+  /** Unique identifier for the project token */
+  _id: string;
+  /** Project token project */
+  project: string;
+  /** Project token */
+  token: string;
+  /** Project token expiration */
+  expiresAt?: string;
+  /** Project token status */
+  status: "active" | "inactive";
+  usage: {
+    requests: number;
+    limit: number;
+  };
+  /** Project token created at */
+  createdAt?: string;
+  /** Project token updated at */
+  updatedAt?: string;
+}

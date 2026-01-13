@@ -10,7 +10,10 @@ export function formatDate(dateString: string): string {
 export function formatRelativeTime(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
+  console.log(date, now);
+  
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+console.log(diffInSeconds);
 
   if (diffInSeconds < 60) return "Just now";
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
