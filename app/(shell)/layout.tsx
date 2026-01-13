@@ -24,9 +24,9 @@ export default function HomeLayout({
 
   return (
     <Suspense fallback={<PageLoader />}>
-      <div className="flex h-screen bg-gray-900 overflow-hidden">
+      <div className="flex h-[calc(100vh-70px)] bg-gray-900 overflow-hidden">
         <Sidebar />
-        <div className="flex-1 flex flex-col p-3 overflow-hidden">
+        <div className="flex-1 flex flex-col p-3 overflow-y-auto">
           {children}
         </div>
       </div>

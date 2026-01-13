@@ -9,7 +9,8 @@ import {
   Settings, 
   Home,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  KeyIcon
 } from "lucide-react";
 
 interface NavItem {
@@ -39,6 +40,11 @@ const navigation: NavItem[] = [
     name: "Settings",
     href: "/settings",
     icon: Settings,
+  },
+  {
+    name: "API Access",
+    href: "/api-access",
+    icon: KeyIcon,
   },
 ];
 

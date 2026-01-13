@@ -53,12 +53,10 @@ export async function PATCH(
     const { flag } = result;
     const body = await req.json();
     const { name, description, status } = body;
-    if (!name || !description) {
-      return BadRequestResponse("Name and description are required");
-    }
-    flag.name = name;
-    flag.description = description;
-    flag.status = status;
+
+    if (name) flag.name = name;
+    if (description) flag.description = description;
+    if (status) flag.status = status;
     await flag.save();
 
     return SuccessResponse(flag);

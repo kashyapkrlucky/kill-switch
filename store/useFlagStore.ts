@@ -8,7 +8,7 @@ interface FlagStore {
   flags: IFlag[];
   getFlags: (project: string) => Promise<void>;
   createFlag: (flag: IFlag) => Promise<void>;
-  updateFlag: (flag: IFlag) => Promise<void>;
+  updateFlag: (flagId: string, flag: Partial<IFlag>) => Promise<void>;
   deleteFlag: (flagId: string) => Promise<void>;
 }
 
@@ -42,18 +42,15 @@ export const useFlagStore = create<FlagStore>((set) => ({
       set({ loading: false });
     }
   },
-  updateFlag: async (flag) => {
+  updateFlag: async (flagId: string, flag: Partial<IFlag>) => {
     try {
-      set({ loading: true, error: null });
-      const response = await axios.put(`/flags/${flag._id}`, flag);
+      await axios.patch(`/flags/${flagId}`, flag);
       set((state) => ({
-        flags: state.flags.map((f) => (f._id === flag._id ? response.data : f)),
+        flags: state.flags.map((f) => (f._id === flagId ? { ...f, ...flag } : f)),
       }));
     } catch (error) {
       console.error("Error updating flag:", error);
       set({ error: "Failed to update flag" });
-    } finally {
-      set({ loading: false });
     }
   },
   deleteFlag: async (flagId) => {
@@ -69,3 +66,4 @@ export const useFlagStore = create<FlagStore>((set) => ({
     }
   },
 }));
+

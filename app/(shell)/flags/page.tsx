@@ -3,25 +3,45 @@
 import { useEffect, useState } from "react";
 import { useFlagStore } from "@/store/useFlagStore";
 import { useProjectStore } from "@/store/useProjectStore";
-import { IFlag } from "@/core/types/app.types";
+import { IFlag, FlagStatus } from "@/core/types/app.types";
 import { Button } from "@/components/ui/Button";
 import LabeledSelectField from "@/components/ui/LabeledSelectField";
 import { FolderIcon, Plus, Settings, Trash2, Flag } from "lucide-react";
 import CreateFlagForm from "@/components/flags/CreateFlagForm";
+import PageLoader from "@/components/layout/PageLoader";
+
+// Toggle component for better organization
+const ToggleSwitch = ({
+  isOn,
+  onToggle,
+  disabled = false,
+}: {
+  isOn: boolean;
+  onToggle: () => void;
+  disabled?: boolean;
+}) => (
+  <button
+    type="button"
+    onClick={onToggle}
+    disabled={disabled}
+    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-800 ${
+      isOn ? "bg-emerald-500" : "bg-gray-600"
+    } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+  >
+    <span
+      className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform duration-200 ease-in-out ${
+        isOn ? "translate-x-5" : "translate-x-1"
+      }`}
+    />
+  </button>
+);
 
 export default function FlagsPage() {
-  const {
-    flags,
-    getFlags,
-    deleteFlag,
-    loading,
-    error,
-  } = useFlagStore();
+  const { flags, getFlags, deleteFlag, updateFlag, loading } = useFlagStore();
   const { projects, getProjects } = useProjectStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingFlag, setEditingFlag] = useState<IFlag | null>(null);
   const [selectedProject, setSelectedProject] = useState("");
-
 
   const closeModal = () => {
     setIsCreateModalOpen(false);
@@ -39,9 +59,8 @@ export default function FlagsPage() {
     }
   };
 
-
   const handleEdit = (flag: IFlag) => {
-    setEditingFlag(flag); 
+    setEditingFlag(flag);
     setIsCreateModalOpen(true);
   };
 
@@ -49,6 +68,16 @@ export default function FlagsPage() {
     if (confirm("Are you sure you want to delete this flag?")) {
       await deleteFlag(flagId);
     }
+  };
+
+  const handleToggleStatus = async (id: string, flag: IFlag) => {
+    const updatedFlag = {
+      status:
+        flag.status === FlagStatus.ACTIVE
+          ? FlagStatus.INACTIVE
+          : FlagStatus.ACTIVE,
+    };
+    await updateFlag(id, updatedFlag);
   };
 
   return (
@@ -94,22 +123,9 @@ export default function FlagsPage() {
         </div>
       </div>
 
-      {/* Error State */}
-      {error && (
-        <div className="mb-3 p-2 bg-red-500/10 border border-red-500/50 rounded-lg">
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-            <p className="text-red-400 font-medium text-sm">{error}</p>
-          </div>
-        </div>
-      )}
-
       {/* Loading State */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-          <p className="text-gray-400 text-sm">Loading flags...</p>
-        </div>
+        <PageLoader />
       ) : (
         <>
           {/* Flags Table */}
@@ -160,14 +176,15 @@ export default function FlagsPage() {
                     </div>
 
                     <div className="col-span-2 flex items-center gap-2">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          flag.status === "active"
-                            ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                            : "bg-red-500/20 text-red-400 border border-red-500/30"
-                        }`}
-                      >
-                        {flag.status === "active" ? "● Active" : "● Inactive"}
+                      <ToggleSwitch
+                        isOn={flag.status === FlagStatus.ACTIVE}
+                        onToggle={() => handleToggleStatus(flag._id, flag)}
+                        disabled={loading}
+                      />
+                      <span className="text-xs text-gray-400">
+                        {flag.status === FlagStatus.ACTIVE
+                          ? "Active"
+                          : "Inactive"}
                       </span>
                     </div>
 
@@ -238,10 +255,7 @@ export default function FlagsPage() {
 
       {/* Modal */}
       {(isCreateModalOpen || editingFlag) && (
-        <CreateFlagForm
-          editingFlag={editingFlag}
-          closeModal={closeModal}
-        />
+        <CreateFlagForm editingFlag={editingFlag} closeModal={closeModal} />
       )}
     </div>
   );

@@ -20,27 +20,13 @@ export interface IUser {
   updatedAt?: string;
 }
 
-
 export interface IProfile {
   /** Unique identifier for the profile */
   _id: string;
   user: IUser;
   name: string;
   username: string;
-  bio?: string;
-  dob?: Date;
-  phone?: string;
-  city?: string;
   country?: string;
-  isPublic?: boolean;
-  cover?: string;
-  urlWebsite?: string;
-  urlLinkedIn?: string;
-  urlTwitter?: string;
-  urlGithub?: string;
-  urlInstagram?: string;
-  urlDribbble?: string;
-
   /** When the reply was created */
   createdAt: string;
   /** When the reply was last updated */
@@ -55,7 +41,7 @@ export interface IProject {
   /** Project description */
   description?: string;
   /** Project status */
-  status: 'active' | 'inactive' | 'completed';
+  status: "active" | "inactive" | "completed";
   /** Project owner */
   owner: string;
   /** Project members */
@@ -85,10 +71,9 @@ export interface IFlag {
   updatedAt?: string;
 }
 
-
 export const FlagStatus = {
-  ACTIVE: 'active',
-  INACTIVE: 'inactive',
+  ACTIVE: "active",
+  INACTIVE: "inactive",
 } as const;
 
-export type FlagStatusType = typeof FlagStatus[keyof typeof FlagStatus];
+export type FlagStatusType = (typeof FlagStatus)[keyof typeof FlagStatus];

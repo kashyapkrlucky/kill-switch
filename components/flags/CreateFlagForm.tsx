@@ -4,33 +4,28 @@ import { Flag } from "lucide-react";
 import { useState } from "react";
 import { ButtonOutline } from "../ui/ButtonOutline";
 import { Button } from "../ui/Button";
-
+import CustomToast from "../ui/CustomToast";
 interface Props {
   editingFlag: Partial<IFlag> | null;
   closeModal: () => void;
 }
 export default function CreateFlagForm({ editingFlag, closeModal }: Props) {
-  const { createFlag, updateFlag } = useFlagStore();
+  const { createFlag, updateFlag, error } = useFlagStore();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    status: "active" as "active" | "inactive",
-    project: "",
-  });
+  const [formData, setFormData] = useState(editingFlag || { name: "", description: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (editingFlag) {
-        await updateFlag(formData as IFlag);
+      if (editingFlag && editingFlag._id) {
+        await updateFlag(editingFlag._id, formData as IFlag);
       } else {
         await createFlag(formData as IFlag);
       }
       closeModal();
-      setFormData({ name: "", description: "", status: "active", project: "" });
+      setFormData({ name: "", description: "" });
     } catch (error) {
-      console.error("Error saving flag:", error);
+      CustomToast("error", "Error in modifying flag");
     }
   };
 
@@ -76,29 +71,6 @@ export default function CreateFlagForm({ editingFlag, closeModal }: Props) {
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-gray-300 mb-1.5">
-              Status
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  status: e.target.value as "active" | "inactive",
-                })
-              }
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-white transition-all duration-200 text-sm"
-            >
-              <option value="active" className="bg-slate-700">
-                Active
-              </option>
-              <option value="inactive" className="bg-slate-700">
-                Inactive
-              </option>
-            </select>
-          </div>
-
           <div className="flex justify-end gap-2 pt-2">
             <ButtonOutline
               type="button"
@@ -107,8 +79,6 @@ export default function CreateFlagForm({ editingFlag, closeModal }: Props) {
                 setFormData({
                   name: "",
                   description: "",
-                  status: "active",
-                  project: "",
                 });
               }}
             >
