@@ -5,11 +5,10 @@ import { useFlagStore } from "@/store/useFlagStore";
 import { Button } from "@/components/ui/Button";
 import { Plus, Flag } from "lucide-react";
 import CreateFlagForm from "@/components/flags/CreateFlagForm";
-import PageLoader from "@/components/layout/PageLoader";
 import FlagList from "@/components/flags/FlagList";
 
 export default function FlagsPage() {
-  const { flags, getFlags, loading } = useFlagStore();
+  const { flags, getFlags } = useFlagStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function FlagsPage() {
       </div>
 
       {/* Loading State */}
-      {loading ? <PageLoader /> : <FlagList flags={flags} />}
+      <FlagList flags={flags} />
 
       {/* Modal */}
       {isCreateModalOpen && (

@@ -4,8 +4,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { UserMenu } from "./UserMenu";
 import Link from "next/link";
 import Image from "next/image";
+import React from "react";
 
-export default function Header() {
+function Header() {
   const { user } = useAuth();
   return (
     <header className="sticky top-0 z-50 bg-gray-900 border-b border-gray-800 flex flex-row items-center justify-between">
@@ -32,3 +33,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default React.memo(Header);

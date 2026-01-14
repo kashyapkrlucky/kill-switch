@@ -17,7 +17,6 @@ export default function Home() {
   const { stats, getStats } = useDashboardStore();
   const hasCurrentRef = useRef(false);
 
-  // Fetch recent flags on mount
   useEffect(() => {
     if (hasCurrentRef.current) return;
     hasCurrentRef.current = true;
@@ -26,7 +25,7 @@ export default function Home() {
 
   return (
     <div className="w-full p-2">
-      {/* Header */}
+      {/* Page Header */}
       <PageHeader
         title="Dashboard"
         description="Overview of your feature flags and projects"
@@ -40,7 +39,6 @@ export default function Home() {
           value={stats.projects}
           icon={<FolderOpen className="w-4 h-4 text-blue-500" />}
           iconColor="bg-blue-500/20"
-          // description="+2 this week"
         />
 
         <InfoCard
@@ -48,7 +46,6 @@ export default function Home() {
           value={stats.activeFlags}
           icon={<Flag className="w-4 h-4 text-emerald-500" />}
           iconColor="bg-emerald-500/20"
-          // description="77% of total"
         />
 
         <InfoCard
@@ -56,7 +53,6 @@ export default function Home() {
           value={stats.totalFlags}
           icon={<Shield className="w-4 h-4 text-purple-500" />}
           iconColor="bg-purple-500/20"
-          // description="+5 this week"
         />
 
         <InfoCard
@@ -64,12 +60,10 @@ export default function Home() {
           value={stats.apiTokens}
           icon={<KeyIcon className="w-4 h-4 text-red-500" />}
           iconColor="bg-red-500/20"
-          // description="+5 this week"
         />
       </div>
       {/* Main Content Grid */}
       <div className="flex flex-col gap-4">
-        {/* Recent Flags */}
         <RecentFlags />
         <ApiUsage />
       </div>
