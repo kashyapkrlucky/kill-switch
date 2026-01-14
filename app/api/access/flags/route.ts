@@ -5,7 +5,7 @@ import {
   UnauthorizedResponse,
 } from "@/core/utils/responses";
 import { Flag } from "@/core/models/Flag";
-
+import { connectToDatabase } from "@/core/lib/database";
 // based on token return flags, token will have project id and permissions
 export async function GET(request: Request) {
   try {
@@ -13,6 +13,7 @@ export async function GET(request: Request) {
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.split(" ")[1];
 
+    await connectToDatabase();
     // validate token
     const projectToken = await ProjectToken.findOne({ token });
     if (!projectToken) {
@@ -28,10 +29,9 @@ export async function GET(request: Request) {
     if (!projectToken.project) {
       return UnauthorizedResponse("Token is invalid");
     }
-    
+
     // extract project id and permissions
     const { project } = projectToken;
-
 
     const flags = await Flag.find({ project }).select("name code status");
     const flagsData = flags.map((flag) => {

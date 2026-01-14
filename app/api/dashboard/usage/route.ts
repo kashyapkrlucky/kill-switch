@@ -9,6 +9,7 @@ import { getUserIdFromCookie } from "@/core/lib/auth";
 import { Project } from "@/core/models/Project";
 import { ProjectToken } from "@/core/models/ProjectToken";
 import { IDBProject } from "@/core/types/database.types";
+import { connectToDatabase } from "@/core/lib/database";
 
 export async function GET() {
   try {
@@ -17,6 +18,7 @@ export async function GET() {
       return BadRequestResponse("User not found");
     }
 
+    await connectToDatabase();
     // Get user's project IDs once to reuse
     const userProjectIds = await Project.find({
       $or: [{ owner: userId }, { members: userId }],

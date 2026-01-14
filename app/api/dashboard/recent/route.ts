@@ -2,6 +2,7 @@ import { ErrorResponse, SuccessResponse } from "@/core/utils/responses";
 import { Project } from "@/core/models/Project";
 import { getUserIdFromCookie } from "@/core/lib/auth";
 import mongoose from "mongoose";
+import { connectToDatabase } from "@/core/lib/database";
 
 export async function GET() {
   try {
@@ -9,6 +10,8 @@ export async function GET() {
     if (!userId) {
       return ErrorResponse(new Error("User not found"));
     }
+
+    await connectToDatabase();
 
     const flags = await Project.aggregate([
       {
