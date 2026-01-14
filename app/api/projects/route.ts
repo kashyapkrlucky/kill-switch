@@ -33,8 +33,9 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const project = new Project({
-      name: body.name || "New Project",
-      description: body.description || "",
+      name: body.name,
+      code: body.name.substring(0, 3).toUpperCase(),
+      description: body.description,
       owner: new mongoose.Types.ObjectId(userId),
       members: [new mongoose.Types.ObjectId(userId)],
     });

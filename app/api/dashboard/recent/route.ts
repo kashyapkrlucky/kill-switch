@@ -50,6 +50,7 @@ export async function GET() {
       {
         $project: {
           name: 1,
+          code:1,
           description: 1,
           status: 1,
           createdAt: 1,

@@ -33,11 +33,18 @@ export async function GET(request: Request) {
     const { project } = projectToken;
 
 
-    const flags = await Flag.find({ project }).select("name status");
+    const flags = await Flag.find({ project }).select("name code status");
+    const flagsData = flags.map((flag) => {
+      return {
+        code: flag.code,
+        name: flag.name,
+        status: flag.status,
+      };
+    });
     projectToken.usage.requests += 1;
     await projectToken.save();
     // return flags
-    return SuccessResponse(flags);
+    return SuccessResponse(flagsData);
   } catch (error) {
     return ErrorResponse(error as Error);
   }

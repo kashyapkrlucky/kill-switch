@@ -8,6 +8,11 @@ const ProjectSchema = new Schema<IDBProject>(
       required: [true, "Project name is required"],
       trim: true,
     },
+    code: {
+      type: String,
+      required: [true, "Project code is required"],
+      trim: true,
+    },
     description: {
       type: String,
       trim: true,

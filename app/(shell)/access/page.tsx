@@ -102,7 +102,7 @@ export default function ApiAccess() {
           {/* Middle & Right Columns - Token Display */}
           {tokens && tokens.length > 0 ? (
             tokens?.map((token) => (
-              <div key={token._id}>
+              <div className="space-y-4" key={token._id}>
                 {/* Token Details */}
                 <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
                   <div className="flex items-center justify-between mb-4">

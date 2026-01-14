@@ -27,3 +27,13 @@ console.log(diffInSeconds);
     day: "numeric",
   });
 }
+
+
+export function generateProjectCode(name: string): string {
+  return name.substring(0, 3).toUpperCase();
+}
+
+export function generateFlagCode(projectCode: string, flagCount: number): string {
+  // must return like PRJ0001, PRJ0002, etc.
+  return `${projectCode}${String(flagCount + 1).padStart(4, "0")}`;
+}

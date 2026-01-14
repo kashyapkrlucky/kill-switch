@@ -1,18 +1,26 @@
+"use client";
 import { IFlag } from "@/core/types/app.types";
 import { useFlagStore } from "@/store/useFlagStore";
-import { Flag } from "lucide-react";
-import { useState } from "react";
+import { Flag, FolderIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 import { ButtonOutline } from "../ui/ButtonOutline";
 import { Button } from "../ui/Button";
 import CustomToast from "../ui/CustomToast";
+import { useProjectStore } from "@/store/useProjectStore";
+import LabeledSelectField from "../ui/LabeledSelectField";
 interface Props {
-  editingFlag: Partial<IFlag> | null;
+  editingFlag?: Partial<IFlag> | null;
   closeModal: () => void;
 }
 export default function CreateFlagForm({ editingFlag, closeModal }: Props) {
-  const { createFlag, updateFlag, error } = useFlagStore();
+  const { createFlag, updateFlag } = useFlagStore();
+  const { projects, getProjects } = useProjectStore();
 
-  const [formData, setFormData] = useState(editingFlag || { name: "", description: "" });
+  const [selectedProject, setSelectedProject] = useState("");
+
+  const [formData, setFormData] = useState(
+    editingFlag || { name: "", description: "" }
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,17 +28,24 @@ export default function CreateFlagForm({ editingFlag, closeModal }: Props) {
       if (editingFlag && editingFlag._id) {
         await updateFlag(editingFlag._id, formData as IFlag);
       } else {
-        await createFlag(formData as IFlag);
+        await createFlag({ ...formData, project: selectedProject } as IFlag);
       }
       closeModal();
       setFormData({ name: "", description: "" });
     } catch (error) {
+      console.log(error);
       CustomToast("error", "Error in modifying flag");
     }
   };
 
+  useEffect(() => {
+    if (!projects.length) {
+      getProjects();
+    }
+  }, [getProjects, projects.length]);
+
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 top-0 left-0 right-0 bottom-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 w-full max-w-md shadow-2xl">
         <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
           <div className="w-6 h-6 bg-emerald-500/20 rounded-md flex items-center justify-center">
@@ -70,7 +85,20 @@ export default function CreateFlagForm({ editingFlag, closeModal }: Props) {
               placeholder="Describe what this flag does..."
             />
           </div>
-
+          <LabeledSelectField
+            label=""
+            icon={<FolderIcon className="w-3 h-3 text-gray-400" />}
+            value={selectedProject}
+            onChange={(e) => setSelectedProject(e.target.value)}
+            options={[
+              { value: "", label: "Choose project..." },
+              ...projects.map((project) => ({
+                value: project._id,
+                label: project.name,
+              })),
+            ]}
+            className="pl-8 pr-8 appearance-none bg-slate-800 border-slate-700 text-white text-sm"
+          />
           <div className="flex justify-end gap-2 pt-2">
             <ButtonOutline
               type="button"

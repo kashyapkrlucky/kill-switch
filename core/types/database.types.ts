@@ -59,6 +59,8 @@ export interface IDBProject extends Document {
   _id: Types.ObjectId;
   /** Project name */
   name: string;
+  /** Project code */
+  code: string;
   /** Project description */
   description?: string;
   /** Project status */
@@ -78,6 +80,8 @@ export interface IDBFlag extends Document {
   _id: Types.ObjectId;
   /** Flag project */
   project: Types.ObjectId;
+  /** Flag code */
+  code: string;
   /** Flag name */
   name: string;
   /** Flag description */

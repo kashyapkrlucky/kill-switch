@@ -1,23 +1,29 @@
-import { BadRequestResponse, ErrorResponse, SuccessResponse } from "@/core/utils/responses";
+import {
+  BadRequestResponse,
+  ErrorResponse,
+  SuccessResponse,
+} from "@/core/utils/responses";
 import { getUserIdFromCookie } from "@/core/lib/auth";
 import { connectToDatabase } from "@/core/lib/database";
-import mongoose from "mongoose";
 import { Flag } from "@/core/models/Flag";
+import { Project } from "@/core/models/Project";
+import { generateFlagCode } from "@/core/utils/helpers";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const userId = await getUserIdFromCookie();
     if (!userId) {
       return BadRequestResponse("User not found");
     }
-
-    const url = new URL(req.url);
-    const projectId = url.searchParams.get("project");
-
     await connectToDatabase();
+
+    const userProjectIds = await Project.find({
+      $or: [{ owner: userId }, { members: userId }],
+    }).distinct("_id");
+
     const flags = await Flag.find({
-      project: new mongoose.Types.ObjectId(projectId!),
-    });
+      project: { $in: userProjectIds },
+    }).sort({ createdAt: -1 }).populate("project", "name");
     return SuccessResponse(flags);
   } catch (error) {
     return ErrorResponse(error);
@@ -33,15 +39,27 @@ export async function POST(request: Request) {
 
     await connectToDatabase();
 
-    const body = await request.json();
+    const { name, description, project } = await request.json();
+    const projectDoc = await Project.findById(project);
+    if (!projectDoc) {
+      return BadRequestResponse("Project not found");
+    }
+
+    const flags = await Flag.countDocuments({ project: projectDoc._id });
+    const code = generateFlagCode(projectDoc?.code, flags);
     const flag = new Flag({
-      name: body.name || "New Flag",
-      description: body.description || "",
-      project: body.project,
+      name,
+      code,
+      description,
+      project,
     });
 
-    await flag.save();
-    return SuccessResponse(flag);
+    const savedFlag = await flag.save();
+    
+    // Populate project field before returning
+    const populatedFlag = await Flag.findById(savedFlag._id).populate('project', 'name code');
+    
+    return SuccessResponse(populatedFlag);
   } catch (error) {
     return ErrorResponse(error);
   }

@@ -4,7 +4,13 @@ import RecentFlags from "@/components/dashboard/RecentFlags";
 import PageHeader from "@/components/layout/PageHeader";
 import InfoCard from "@/components/ui/InfoCard";
 import { useDashboardStore } from "@/store/useDashboardStore";
-import { Flag, FolderOpen, Shield, LayoutDashboardIcon } from "lucide-react";
+import {
+  Flag,
+  FolderOpen,
+  Shield,
+  LayoutDashboardIcon,
+  KeyIcon,
+} from "lucide-react";
 import { useEffect, useRef } from "react";
 
 export default function Home() {
@@ -17,7 +23,6 @@ export default function Home() {
     hasCurrentRef.current = true;
     getStats();
   }, [getStats]);
-
 
   return (
     <div className="w-full p-2">
@@ -35,7 +40,7 @@ export default function Home() {
           value={stats.projects}
           icon={<FolderOpen className="w-4 h-4 text-blue-500" />}
           iconColor="bg-blue-500/20"
-          description="+2 this week"
+          // description="+2 this week"
         />
 
         <InfoCard
@@ -43,7 +48,7 @@ export default function Home() {
           value={stats.activeFlags}
           icon={<Flag className="w-4 h-4 text-emerald-500" />}
           iconColor="bg-emerald-500/20"
-          description="77% of total"
+          // description="77% of total"
         />
 
         <InfoCard
@@ -51,22 +56,22 @@ export default function Home() {
           value={stats.totalFlags}
           icon={<Shield className="w-4 h-4 text-purple-500" />}
           iconColor="bg-purple-500/20"
-          description="+5 this week"
+          // description="+5 this week"
         />
 
         <InfoCard
           title="API Tokens"
           value={stats.apiTokens}
-          icon={<Shield className="w-4 h-4 text-purple-500" />}
-          iconColor="bg-purple-500/20"
-          description="+5 this week"
+          icon={<KeyIcon className="w-4 h-4 text-red-500" />}
+          iconColor="bg-red-500/20"
+          // description="+5 this week"
         />
       </div>
       {/* Main Content Grid */}
       <div className="flex flex-col gap-4">
-        {/* Recent Flags */} 
-          <RecentFlags />
-          <ApiUsage />  
+        {/* Recent Flags */}
+        <RecentFlags />
+        <ApiUsage />
       </div>
     </div>
   );

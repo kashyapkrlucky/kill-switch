@@ -14,6 +14,11 @@ const FlagSchema = new Schema<IDBFlag>(
       required: [true, "Flag name is required"],
       trim: true,
     },
+    code: {
+      type: String,
+      required: [true, "Flag code is required"],
+      trim: true,
+    },
     description: {
       type: String,
       trim: true,

@@ -38,6 +38,8 @@ export interface IProject {
   _id: string;
   /** Project name */
   name: string;
+  /** Project code */
+  code: string;
   /** Project description */
   description?: string;
   /** Project status */
@@ -58,9 +60,11 @@ export interface IFlag {
   /** Unique identifier for the flag */
   _id: string;
   /** Flag project */
-  project: string;
+  project: string | IProject;
   /** Flag name */
   name: string;
+  /** Flag code */
+  code: string;
   /** Flag description */
   description?: string;
   /** Flag status */

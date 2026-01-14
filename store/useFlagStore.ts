@@ -6,7 +6,7 @@ interface FlagStore {
   loading: boolean;
   error: string | null;
   flags: IFlag[];
-  getFlags: (project: string) => Promise<void>;
+  getFlags: () => Promise<void>;
   createFlag: (flag: IFlag) => Promise<void>;
   updateFlag: (flagId: string, flag: Partial<IFlag>) => Promise<void>;
   deleteFlag: (flagId: string) => Promise<void>;
@@ -16,12 +16,12 @@ export const useFlagStore = create<FlagStore>((set) => ({
   loading: false,
   error: null,
   flags: [],
-  getFlags: async (project) => {
+  getFlags: async () => {
     try {
       set({ loading: true, error: null });
       const {
         data: { data },
-      } = await axios.get(`/flags?project=${project}`);
+      } = await axios.get(`/flags`);
       set({ flags: data });
     } catch (error) {
       console.error("Error fetching flags:", error);
@@ -33,7 +33,9 @@ export const useFlagStore = create<FlagStore>((set) => ({
   createFlag: async (flag) => {
     try {
       set({ loading: true, error: null });
-      const { data } = await axios.post("/flags", flag);
+      const {
+        data: { data },
+      } = await axios.post("/flags", flag);
       set((state) => ({ flags: [...state.flags, data] }));
     } catch (error) {
       console.error("Error creating flag:", error);
@@ -46,7 +48,9 @@ export const useFlagStore = create<FlagStore>((set) => ({
     try {
       await axios.patch(`/flags/${flagId}`, flag);
       set((state) => ({
-        flags: state.flags.map((f) => (f._id === flagId ? { ...f, ...flag } : f)),
+        flags: state.flags.map((f) =>
+          f._id === flagId ? { ...f, ...flag } : f
+        ),
       }));
     } catch (error) {
       console.error("Error updating flag:", error);
@@ -66,4 +70,3 @@ export const useFlagStore = create<FlagStore>((set) => ({
     }
   },
 }));
-

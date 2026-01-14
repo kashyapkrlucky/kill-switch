@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  FolderOpen, 
-  Flag, 
-  Settings, 
-  Home,
+import {
   ChevronDown,
   ChevronRight,
-  KeyIcon
+  KeyIcon,
+  LayoutDashboardIcon,
+  FolderOpenIcon,
+  FlagIcon,
+  SettingsIcon
 } from "lucide-react";
 
 interface NavItem {
@@ -22,24 +22,24 @@ interface NavItem {
 
 const navigation: NavItem[] = [
   {
-    name: "Home",
+    name: "Dashboard",
     href: "/",
-    icon: Home,
+    icon: LayoutDashboardIcon,
   },
   {
     name: "Projects",
     href: "/projects",
-    icon: FolderOpen,
+    icon: FolderOpenIcon,
   },
   {
     name: "Flags",
     href: "/flags",
-    icon: Flag,
+    icon: FlagIcon,
   },
   {
     name: "Settings",
     href: "/settings",
-    icon: Settings,
+    icon: SettingsIcon,
   },
   {
     name: "API Access",
