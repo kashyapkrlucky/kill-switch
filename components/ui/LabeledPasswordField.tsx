@@ -29,6 +29,7 @@ export default function LabeledPasswordField({ label, error, ...props }: Props) 
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
+          tabIndex={-1}
           className="absolute inset-y-0 right-0 pr-3 flex items-center"
         >
           {showPassword ? (

@@ -104,23 +104,22 @@ function SignUp() {
             className="h-4 w-4 rounded border border-gray-500"
           />
           I agree to the
-          <PageLink href="/terms">Terms & Conditions</PageLink>
+          <PageLink href="/terms" size="sm">Terms & Conditions</PageLink>
         </label>
 
         <div className="flex justify-end">
           <Button
             type="submit"
             disabled={loading}
-            // loading={loading}
-            // fullWidth
+            size="md"
           >
             Create account
           </Button>
         </div>
       </form>
 
-      <div className="mt-6 text-sm text-slate-300">
-        Already have an account?{" "}
+      <div className="mt-6 text-sm text-slate-300 text-center">
+        Already have an account? {" "}
         <PageLink href="/sign-in" size="sm">
           Sign in
         </PageLink>

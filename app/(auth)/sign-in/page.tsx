@@ -8,6 +8,7 @@ import PageLink from "@/components/ui/PageLink";
 import { MailIcon } from "lucide-react";
 import LabeledInputField from "@/components/ui/LabeledInputField";
 import { APP_NAME } from "@/core/utils/constants";
+import { Button } from "@/components/ui/Button";
 
 function SignIn() {
   const [email, setEmail] = useState("");
@@ -40,14 +41,16 @@ function SignIn() {
 
   return (
     <div className="w-full max-w-md bg-gray-800 border border-gray-700 rounded-2xl shadow-sm p-6">
-      <h1 className="text-2xl font-semibold mb-1 text-slate-100">Welcome back</h1>
+      <h1 className="text-2xl font-semibold mb-1 text-slate-100">
+        Welcome back
+      </h1>
       <p className="text-sm text-slate-400 mb-6">
         Sign in to continue to {APP_NAME}.
       </p>
 
       <form onSubmit={onSubmit} className="space-y-4">
         <LabeledInputField
-          icon={<MailIcon className="h-5 w-5 text-gray-400" />}
+          icon={<MailIcon className="h-4 w-4 text-gray-300" />}
           label="Email"
           type="text"
           name="email"
@@ -63,23 +66,23 @@ function SignIn() {
           name="password"
         />
 
-        <div className="flex items-center justify-end">
-          <PageLink href="/forgot-password">Forgot password?</PageLink>
+        <div className="flex items-center justify-start">
+          <PageLink href="/forgot-password" size="sm">
+            Forgot password?
+          </PageLink>
         </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full inline-flex items-center justify-center bg-indigo-600 text-white rounded-lg px-3 py-3 text-sm font-medium disabled:opacity-60"
-          tabIndex={0}
-        >
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
+        <div className="flex justify-end">
+          <Button type="submit" disabled={loading} size="md">
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
+        </div>
       </form>
 
-      <div className="mt-6 text-sm text-slate-400">
+      <div className="mt-6 text-sm text-slate-400 text-center">
         Don&apos;t have an account?{" "}
-        <PageLink href="/sign-up" size="sm">Create one</PageLink>
+        <PageLink href="/sign-up" size="sm">
+          Create one
+        </PageLink>
       </div>
     </div>
   );
