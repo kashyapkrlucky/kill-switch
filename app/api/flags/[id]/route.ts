@@ -6,6 +6,7 @@ import {
 import { getUserIdFromCookie } from "@/core/lib/auth";
 import { connectToDatabase } from "@/core/lib/database";
 import { Flag } from "@/core/models/Flag";
+import { cache } from "@/core/lib/redis";
 
 const validateUserAndFlag = async (id: string) => {
   const userId = await getUserIdFromCookie();
@@ -59,6 +60,9 @@ export async function PATCH(
     if (status) flag.status = status;
     await flag.save();
 
+    // Invalidate cache for this project
+    cache.del(`flags:${flag.project}`);
+
     return SuccessResponse(flag);
   } catch (error) {
     return ErrorResponse(error);
@@ -76,7 +80,12 @@ export async function DELETE(
       return BadRequestResponse("User not found or flag not found");
     }
     const { flag } = result;
+    const projectId = flag.project;
     await flag.deleteOne();
+    
+    // Invalidate cache for this project
+    cache.del(`flags:${projectId}`);
+    
     return SuccessResponse("Flag deleted");
   } catch (error) {
     return ErrorResponse(error);

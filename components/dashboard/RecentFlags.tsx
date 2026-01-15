@@ -30,7 +30,7 @@ export default function RecentFlags() {
         </PageLink>
       </div>
 
-      <FlagList flags={recentFlags} isDashboard={true} />
+      <FlagList flags={recentFlags} />
     </div>
   );
 }

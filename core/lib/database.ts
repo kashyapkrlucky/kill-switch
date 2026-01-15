@@ -18,8 +18,16 @@ if (!g.mongooseCache) {
 export async function connectToDatabase() {
   if (g.mongooseCache?.conn) return g.mongooseCache.conn;
   if (!g.mongooseCache?.promise) {
-    g.mongooseCache!.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
+    g.mongooseCache!.promise = mongoose.connect(MONGODB_URI, { 
+      bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
   }
   g.mongooseCache!.conn = await g.mongooseCache!.promise;
   return g.mongooseCache!.conn;
 }
+
+// Warm up connection on startup
+connectToDatabase().catch(console.error);

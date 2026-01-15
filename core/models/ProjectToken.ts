@@ -38,6 +38,9 @@ const ProjectTokenSchema = new Schema<IDBProjectToken>(
   }
 );
 
+ProjectTokenSchema.index({ token: 1 });
+ProjectTokenSchema.index({ project: 1 });
+
 /**
  * Mongoose model for the Project collection
  * Uses existing model if it exists, otherwise creates a new one

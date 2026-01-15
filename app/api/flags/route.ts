@@ -8,6 +8,7 @@ import { connectToDatabase } from "@/core/lib/database";
 import { Flag } from "@/core/models/Flag";
 import { Project } from "@/core/models/Project";
 import { generateFlagCode } from "@/core/utils/helpers";
+import { cache } from "@/core/lib/redis";
 
 export async function GET() {
   try {
@@ -55,6 +56,9 @@ export async function POST(request: Request) {
     });
 
     const savedFlag = await flag.save();
+    
+    // Invalidate cache for this project
+    cache.del(`flags:${project}`);
     
     // Populate project field before returning
     const populatedFlag = await Flag.findById(savedFlag._id).populate('project', 'name code');

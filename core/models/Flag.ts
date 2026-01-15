@@ -34,6 +34,8 @@ const FlagSchema = new Schema<IDBFlag>(
   }
 );
 
+FlagSchema.index({ project: 1 });
+
 /**
  * Mongoose model for the Flag collection
  * Uses existing model if it exists, otherwise creates a new one

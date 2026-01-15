@@ -6,6 +6,7 @@ import {
 } from "@/core/utils/responses";
 import { Flag } from "@/core/models/Flag";
 import { connectToDatabase } from "@/core/lib/database";
+import { cache } from "@/core/lib/redis";
 // based on token return flags, token will have project id and permissions
 export async function GET(request: Request) {
   try {
@@ -14,15 +15,19 @@ export async function GET(request: Request) {
     const token = authHeader?.split(" ")[1];
 
     await connectToDatabase();
-    // validate token
-    const projectToken = await ProjectToken.findOne({ token });
+    
+    // validate token with lean query for better performance
+    const projectToken = await ProjectToken.findOne({ token })
+      .select("project expiresAt usage")
+      .lean();
+    
     if (!projectToken) {
       return UnauthorizedResponse(
         "You are not authorized to access this resource"
       );
     }
 
-    if (projectToken && projectToken.expiresAt < new Date()) {
+    if (projectToken.expiresAt < new Date()) {
       return UnauthorizedResponse("Token has expired");
     }
 
@@ -33,18 +38,28 @@ export async function GET(request: Request) {
     // extract project id and permissions
     const { project } = projectToken;
 
-    const flags = await Flag.find({ project }).select("name code status");
-    const flagsData = flags.map((flag) => {
-      return {
-        code: flag.code,
-        name: flag.name,
-        status: flag.status,
-      };
-    });
-    projectToken.usage.requests += 1;
-    await projectToken.save();
+    // Check cache first
+    const cacheKey = `flags:${project}`;
+    let flags = cache.get(cacheKey);
+    
+    if (!flags) {
+      // Get flags with lean query and projection
+      flags = await Flag.find({ project })
+        .select("name code status")
+        .lean();
+      
+      // Cache for 2 minutes
+      cache.set(cacheKey, flags, 2 * 60 * 1000);
+    }
+    
+    // Update usage count in background
+    ProjectToken.updateOne(
+      { token }, 
+      { $inc: { "usage.requests": 1 } }
+    ).exec();
+
     // return flags
-    return SuccessResponse(flagsData);
+    return SuccessResponse(flags);
   } catch (error) {
     return ErrorResponse(error as Error);
   }
