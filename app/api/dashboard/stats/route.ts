@@ -17,35 +17,42 @@ export async function GET() {
     }
 
     await connectToDatabase();
-    const projects = await Project.countDocuments({
+    
+    // Get user's projects once and reuse the data
+    const userProjects = await Project.find({
       $or: [{ owner: userId }, { members: userId }],
-    });
-    // Get user's project IDs once to reuse
-    const userProjectIds = await Project.find({
-      $or: [{ owner: userId }, { members: userId }],
-    }).distinct("_id");
+    }).select("_id").lean();
+    
+    const userProjectIds = userProjects.map(p => p._id);
+    const projects = userProjects.length;
 
-    // 2. for total flags
-    const totalFlags = await Flag.countDocuments({
-      project: { $in: userProjectIds },
-    });
+    // Use aggregation pipeline to get all flag stats in one query
+    const flagStats = await Flag.aggregate([
+      { $match: { project: { $in: userProjectIds } } },
+      {
+        $group: {
+          _id: null,
+          totalFlags: { $sum: 1 },
+          activeFlags: {
+            $sum: { $cond: [{ $eq: ["$status", "active"] }, 1, 0] }
+          }
+        }
+      }
+    ]);
 
-    // 3. for api tokens
-    const apiTokens = await ProjectToken.countDocuments({
-      project: { $in: userProjectIds },
-    });
+    // Get API tokens count
+    const [apiTokens] = await ProjectToken.aggregate([
+      { $match: { project: { $in: userProjectIds } } },
+      { $count: "apiTokens" }
+    ]);
 
-    // 4. for active flags
-    const activeFlags = await Flag.countDocuments({
-      status: "active",
-      project: { $in: userProjectIds },
-    });
-
+    const stats = flagStats[0] || { totalFlags: 0, activeFlags: 0 };
+    
     return SuccessResponse({
       projects,
-      activeFlags,
-      apiTokens,
-      totalFlags,
+      activeFlags: stats.activeFlags,
+      apiTokens: apiTokens?.apiTokens || 0,
+      totalFlags: stats.totalFlags,
     });
   } catch (error) {
     return ErrorResponse(error as Error);

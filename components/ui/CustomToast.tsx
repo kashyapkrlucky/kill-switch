@@ -3,17 +3,17 @@ import toast from "react-hot-toast";
 export default function CustomToast(type: string, message: string) {
     if (type === "success") {
         return toast.success(message, {
-            position: "bottom-right",
+            position: "top-right",
             duration: 3000,
         })
     } else if (type === "error") {
         return toast.error(message, {
-            position: "bottom-right",
+            position: "top-right",
             duration: 3000,
         })
     } else if (type === "warning") {
         return toast.custom(message, {
-            position: "bottom-right",
+            position: "top-right",
             duration: 3000,
             style: {
                 borderRadius: "10px",
@@ -24,7 +24,7 @@ export default function CustomToast(type: string, message: string) {
         })
     } else {
         return toast(message, {
-            position: "bottom-right",
+            position: "top-right",
             duration: 3000,
         })
     }
