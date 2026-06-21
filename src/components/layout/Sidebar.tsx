@@ -94,21 +94,43 @@ export default function Sidebar() {
       </nav>
     </div>
 
-    <aside className="hidden h-full w-64 shrink-0 flex-col border-r border-slate-800/90 bg-slate-950/70 lg:flex">
+    <aside className="hidden h-full w-72 shrink-0 flex-col border-r border-slate-800/90 bg-slate-950/72 backdrop-blur-xl lg:flex">
       <div className="border-b border-slate-800/80 p-4">
-        <div className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-900/70 p-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-emerald-500/15">
-            <ActivityIcon className="h-4 w-4 text-emerald-300" />
+        <div className="glass-panel overflow-hidden rounded-lg p-4">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-emerald-400/20 bg-emerald-500/15">
+              <ActivityIcon className="h-4 w-4 text-emerald-200" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">Control Plane</p>
+              <p className="text-xs text-slate-400">Flags, access, releases</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-white">Control Plane</p>
-            <p className="text-xs text-slate-400">Flags, access, releases</p>
+          <div className="grid grid-cols-3 gap-2">
+            {["Dev", "Stage", "Prod"].map((label, index) => (
+              <div
+                key={label}
+                className="rounded-md border border-slate-800 bg-slate-950/60 px-2 py-2"
+              >
+                <div
+                  className={`mb-1 h-1 rounded-full ${
+                    index === 2 ? "bg-amber-300" : "bg-emerald-300"
+                  }`}
+                />
+                <p className="text-[11px] font-medium text-slate-300">
+                  {label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       <nav className="flex-1 p-3">
-        <ul className="space-y-0.5">
+        <p className="px-3 pb-2 text-[11px] font-semibold uppercase text-slate-600">
+          Workspace
+        </p>
+        <ul className="space-y-1">
           {navigation.map((item) => {
             const hasChildren = item.children && item.children.length > 0;
             const isExpanded = expandedItems.includes(item.name);
@@ -118,10 +140,10 @@ export default function Sidebar() {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                  className={`group flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
                     active
-                      ? "bg-emerald-500/12 text-emerald-300 shadow-inner"
-                      : "text-slate-400 hover:bg-slate-900 hover:text-white"
+                      ? "border border-emerald-400/20 bg-emerald-500/12 text-emerald-200 shadow-inner"
+                      : "border border-transparent text-slate-400 hover:border-slate-800 hover:bg-slate-900 hover:text-white"
                   }`}
                   onClick={(e) => {
                     if (hasChildren) {
@@ -130,7 +152,11 @@ export default function Sidebar() {
                     }
                   }}
                 >
-                  <item.icon className="h-4 w-4 flex-shrink-0" />
+                  <item.icon
+                    className={`h-4 w-4 flex-shrink-0 ${
+                      active ? "text-emerald-200" : "text-slate-500 group-hover:text-slate-300"
+                    }`}
+                  />
                   <span className="flex-1">{item.name}</span>
                   {hasChildren && (
                     <div className="h-3 w-3 flex-shrink-0">
@@ -170,9 +196,17 @@ export default function Sidebar() {
       </nav>
 
       <div className="border-t border-slate-800/80 p-4">
-        <div className="flex items-center justify-between text-xs text-slate-500">
-          <span>Enterprise console</span>
-          <span>v{APP_VERSION}</span>
+        <div className="hairline-panel rounded-lg p-3">
+          <div className="mb-3 flex items-center justify-between">
+            <span className="text-xs font-medium text-slate-300">
+              Enterprise console
+            </span>
+            <span className="text-xs text-slate-500">v{APP_VERSION}</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(16,185,129,0.7)]" />
+            All systems nominal
+          </div>
         </div>
       </div>
     </aside>

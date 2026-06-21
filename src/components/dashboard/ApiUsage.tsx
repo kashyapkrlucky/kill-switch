@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useDashboardStore } from "@/store/useDashboardStore";
-import { Shield } from "lucide-react";
+import { Activity, Shield } from "lucide-react";
 
 interface TokenUsage {
   id: string;
@@ -29,10 +29,17 @@ export default function ApiUsage() {
 
   if (tokenUsageData.length === 0) {
     return (
-      <section className="rounded-lg border border-slate-800 bg-slate-900/70 p-8">
+      <section className="glass-panel rounded-xl p-8">
         <div className="text-center text-slate-400">
-          <Shield className="mx-auto mb-3 h-10 w-10 opacity-60" />
-          <p className="text-sm">No API tokens found</p>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-slate-800 bg-slate-950/60">
+            <Shield className="h-7 w-7 opacity-60" />
+          </div>
+          <p className="text-sm font-medium text-slate-300">
+            No API tokens found
+          </p>
+          <p className="mt-1 text-xs text-slate-500">
+            Issue a project token to evaluate flags at runtime.
+          </p>
         </div>
       </section>
     );
@@ -41,7 +48,8 @@ export default function ApiUsage() {
   return (
     <section className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-white">
+        <h3 className="flex items-center gap-2 text-sm font-semibold text-white">
+          <Activity className="h-4 w-4 text-sky-300" />
           Access Token Usage
         </h3>
         <span className="text-xs text-slate-500">
@@ -49,15 +57,17 @@ export default function ApiUsage() {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {tokenUsageData.map((token: TokenUsage) => (
           <div
             key={token.id}
-            className="rounded-lg border border-slate-800 bg-slate-900/70 p-4 transition-colors hover:bg-slate-900"
+            className="hairline-panel rounded-xl p-4 transition-transform duration-200 hover:-translate-y-0.5"
           >
-            <div className="flex items-center justify-between mb-3">
+            <div className="mb-4 flex items-center justify-between">
               <div>
-                <h4 className="font-medium text-white">{token.projectName}</h4>
+                <h4 className="text-sm font-semibold text-white">
+                  {token.projectName}
+                </h4>
                 <p className="mt-1 text-xs text-slate-400">
                   Expires: {new Date(token.expiresAt).toLocaleDateString()}
                 </p>
@@ -89,14 +99,14 @@ export default function ApiUsage() {
                     {token.limit.toLocaleString()}
                   </span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                <div className="h-2.5 w-full overflow-hidden rounded-full border border-slate-800 bg-slate-950">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
                       token.percentageUsed > 80
-                        ? "bg-red-500"
+                        ? "bg-rose-400"
                         : token.percentageUsed > 60
-                        ? "bg-yellow-500"
-                        : "bg-emerald-500"
+                          ? "bg-amber-300"
+                          : "bg-emerald-300"
                     }`}
                     style={{
                       width: `${Math.min(token.percentageUsed, 100)}%`,

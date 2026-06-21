@@ -4,6 +4,7 @@ interface InfoCardProps {
   icon: React.ReactNode;
   iconColor?: string;
   description?: string;
+  accent?: "emerald" | "sky" | "violet" | "rose" | "amber";
 }
 export default function InfoCard({
   title,
@@ -11,9 +12,21 @@ export default function InfoCard({
   value,
   icon,
   iconColor = "bg-gray-500/20",
+  accent = "emerald",
 }: InfoCardProps) {
+  const accentClasses = {
+    emerald: "from-emerald-300/50",
+    sky: "from-sky-300/50",
+    violet: "from-violet-300/50",
+    rose: "from-rose-300/50",
+    amber: "from-amber-300/50",
+  };
+
   return (
-    <div className="min-w-0 rounded-lg border border-slate-800 bg-slate-900/70 p-4 shadow-xl shadow-slate-950/20">
+    <div className="hairline-panel group relative min-w-0 overflow-hidden rounded-xl p-4 transition-transform duration-200 hover:-translate-y-0.5">
+      <div
+        className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r ${accentClasses[accent]} via-white/20 to-transparent`}
+      />
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -28,7 +41,9 @@ export default function InfoCard({
             </p>
           )}
         </div>
-        <div className={`${iconColor} rounded-md p-2.5`}>{icon}</div>
+        <div className={`${iconColor} rounded-lg p-2.5 ring-1 ring-white/5`}>
+          {icon}
+        </div>
       </div>
     </div>
   );

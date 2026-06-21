@@ -45,7 +45,19 @@ class SimpleCache {
   }
 }
 
-export const cache = new SimpleCache();
+type GlobalWithCache = typeof globalThis & {
+  killSwitchCache?: SimpleCache;
+  killSwitchCacheCleanupInterval?: ReturnType<typeof setInterval>;
+};
 
-// Clean up expired cache items every minute
-setInterval(() => cache.cleanup(), 60000);
+const globalWithCache = globalThis as GlobalWithCache;
+
+export const cache = globalWithCache.killSwitchCache ?? new SimpleCache();
+globalWithCache.killSwitchCache = cache;
+
+if (!globalWithCache.killSwitchCacheCleanupInterval) {
+  globalWithCache.killSwitchCacheCleanupInterval = setInterval(
+    () => cache.cleanup(),
+    60000
+  );
+}
