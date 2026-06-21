@@ -136,6 +136,32 @@ describe('/api/flags', () => {
       expect(data.data.description).toBe(flagData.description)
       expect(data.data.code).toBe('TST0001')
       expect(data.data.project.name).toBe('Test Project')
+      expect(data.data.environments.development.status).toBe('active')
+      expect(data.data.environments.staging.status).toBe('inactive')
+      expect(data.data.environments.production.status).toBe('inactive')
+      expect(data.data.status).toBe('inactive')
+    })
+
+    it('should create a flag with environment-specific states', async () => {
+      const flagData = {
+        name: 'Release Flag',
+        project: testProject._id.toString(),
+        environments: {
+          development: { status: 'active' },
+          staging: { status: 'active' },
+          production: { status: 'inactive' },
+        },
+      }
+
+      const request = await createAuthenticatedRequest(mockUserId, flagData)
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data.data.environments.development.status).toBe('active')
+      expect(data.data.environments.staging.status).toBe('active')
+      expect(data.data.environments.production.status).toBe('inactive')
+      expect(data.data.status).toBe('inactive')
     })
 
     it('should return 400 when user not authenticated', async () => {
@@ -249,6 +275,7 @@ describe('/api/flags', () => {
       const updateData = {
         name: 'Updated Flag',
         description: 'Updated description',
+        environment: 'production',
         status: 'inactive'
       }
 
@@ -261,7 +288,64 @@ describe('/api/flags', () => {
       expect(response.status).toBe(200)
       expect(data.data.name).toBe('Updated Flag')
       expect(data.data.description).toBe('Updated description')
+      expect(data.data.environments.production.status).toBe('inactive')
       expect(data.data.status).toBe('inactive')
+    })
+
+    it('should update one environment without changing the others', async () => {
+      const flag = new Flag({
+        name: 'Environment Flag',
+        code: 'TST0001',
+        project: testProject._id,
+      })
+      await flag.save()
+
+      const updateData = {
+        environment: 'staging',
+        status: 'active',
+      }
+
+      const mockRequest = await createAuthenticatedRequest(mockUserId, updateData)
+      const mockContext = { params: { id: flag._id.toString() } }
+
+      const response = await UPDATE_BY_ID(mockRequest, mockContext)
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data.data.environments.development.status).toBe('active')
+      expect(data.data.environments.staging.status).toBe('active')
+      expect(data.data.environments.production.status).toBe('inactive')
+      expect(data.data.status).toBe('inactive')
+    })
+
+    it('should reject updates for flags outside user projects', async () => {
+      const otherUserId = '507f1f77bcf86cd799439012'
+      const otherProject = new Project({
+        name: 'Other Project',
+        code: 'OTH',
+        owner: new mongoose.Types.ObjectId(otherUserId),
+        members: [new mongoose.Types.ObjectId(otherUserId)],
+      })
+      await otherProject.save()
+
+      const flag = new Flag({
+        name: 'Other User Flag',
+        code: 'OTH0001',
+        project: otherProject._id,
+      })
+      await flag.save()
+
+      const mockRequest = await createAuthenticatedRequest(mockUserId, {
+        environment: 'production',
+        status: 'active',
+      })
+      const mockContext = { params: { id: flag._id.toString() } }
+
+      const response = await UPDATE_BY_ID(mockRequest, mockContext)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe('User not found or flag not found')
     })
 
     it('should update only provided fields', async () => {

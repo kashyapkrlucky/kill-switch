@@ -13,11 +13,11 @@ const customJestConfig = {
     '<rootDir>/tests/**/*.spec.ts'
   ],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverageFrom: [
-    'app/api/**/*.{ts,tsx}',
-    '!app/api/**/node_modules/**',
+    'src/app/api/**/*.{ts,tsx}',
+    '!src/app/api/**/node_modules/**',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],

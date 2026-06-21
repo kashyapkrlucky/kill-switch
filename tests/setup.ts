@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import { connectToDatabase } from '../core/lib/database'
+import { connectToDatabase } from '../src/core/lib/database'
 
 declare global {
   var connectToDatabase: () => Promise<typeof mongoose>
